@@ -1,46 +1,67 @@
-import React from "react";
+import React, { useState } from "react";
+import WeatherInfo from "./WeatherInfo";
+import WeatherForecast from "./WeatherForecast";
+import axios from "axios";
 import "./Weather.css";
 
-export default function Weather(){
+export default function Weather(props) {
+        const [weatherData, setWeatherData] = useState({ ready: false });
+        const [city, setCity] = useState(props.defaultCity);
+      
+        function handleResponse(response) {
+          setWeatherData({
+            ready: true,
+            coordinates: response.data.coord,
+            temperature: response.data.main.temp,
+            humidity: response.data.main.humidity,
+            date: new Date(response.data.dt * 1000),
+            description: response.data.weather[0].description,
+            icon: response.data.weather[0].icon,
+            wind: response.data.wind.speed,
+            city: response.data.name,
+          });
+        }
+      
+        function handleSubmit(event) {
+          event.preventDefault();
+          search();
+        }
+      
+        function handleCityChange(event) {
+          setCity(event.target.value);
+        }
+      
+        function search() {
+          const apiKey = "f3a4c7fd1572e38d1a0b0f724e0e0218";
+          let apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+          axios.get(apiUrl).then(handleResponse);
+        }
+
+    if (weatherData.ready) {
     return(
         <div className="Weather">  
-            <form >
+            <form className="formSearch">
                 <div className="row">
-
-                    <div className="col-9">                    
+                    <div className="col-9 ">                    
                         <input
                             type="search"
                             placeholder="Enter a city.."            
-                            className="form-control"
+                            className="search-field"
                         />
                     </div>
 
                     <div className="col-3">
-                        <input type="Submit" value="search" className="btn btn-primary"/>
+                        <input type="Submit" value="search" className="search-button"/>
                     </div>
                 </div>   
             </form>              
          
 
-            <h1> New York</h1>
-            <ul>
-                <li> Wednesday 07:00</li>
-                <li> Mostly Cloudly</li>
-            </ul>
-            <div className="row">
-                <div className="col-6">
-                    <img src="https://s3.amazonaws.com/shecodesio-production/uploads/files/000/041/397/original/02d.png?1658582749" className = "icon"  width = "84" 
-                    alt="Mostly Cloudly"/>
-                    6°C
-                </div>  
-                <div className="col-6">
-                    <ul>
-                        <li>Precipitation: 15% </li>
-                        <li>Humiditly: 75%</li>
-                        <li>Wind: 5 km/h </li>
-                    </ul>  
-                </div>
-            </div>
+
         </div>
     )
+} else {
+    search();
+    return "Loading...";
+  }
 }
