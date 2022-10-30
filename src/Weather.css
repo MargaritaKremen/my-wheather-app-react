@@ -1,0 +1,24 @@
+.Weather{
+ border: 1px solid;
+    
+}
+footer {
+   
+    bottom: 3em;
+    left: 1em;
+    text-align: left;
+    color:  #638b95;
+  }
+  .color-link { 
+    color: #fdd020;   
+    text-decoration: none;
+  }
+  .color-link:hover {
+    color:#e2ebee; /* Цвет ссылки при наведении на нее курсора мыши */  
+    text-decoration: underline; /* Добавляем подчеркивание */
+  }
+  .icon {
+    margin-right: 5px;
+    height: "42";
+    width: "42";
+  }
